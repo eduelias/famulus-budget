@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "famulus-budget"
+version = "0.1.0"
+description = "Budget plugin for famulus: ABN AMRO statement import, family budgets, weekly WhatsApp reports."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [{ name = "Eduardo Elias Saleh" }]
+dependencies = ["famulus>=0.1,<1", "httpx>=0.27,<1", "openpyxl>=3.1,<4"]
+
+[project.urls]
+Homepage = "https://github.com/eduelias/famulus-budget"
+
+[project.entry-points."famulus.plugins"]
+budget = "famulus_budget:BudgetPlugin"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/famulus_budget"]
+
+[tool.ruff]
+line-length = 100
+src = ["src"]
