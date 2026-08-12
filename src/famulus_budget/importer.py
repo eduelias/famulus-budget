@@ -14,12 +14,13 @@ INCOME_RULES = [
  ('Other income', r'.'),
 ]
 EXP_RULES = [
+ ('Work (reimbursed)', r"Burger 'n Shake|NYX\*VendingWork|Q-Park"),
  ('Mortgage', r'ABN AMRO BANK NV.*(hy\s?potheek|Termijnbetaling|oh verhoging)'),
  ('Renovation (one-off)', r'Stroomgroep'),
  ('Energy & water', r'NextEnergy|Vattenfall|VITENS|GBLT|ENGIE'),
  ('Taxes (municipal & national)', r'Gemeente Almere|Belastingdienst|GBLT|BNG\*GEMEENTE'),
  ('Insurance', r'NN VERZEKEREN|NATIONALE-NED|Nationale-\s?Nederlanden|CHUBB|ONVZ'),
- ('Car & transport', r'ATHLON|Shell|Q-Park|CJIB|Dancar|PARK MOBILE|Kwik-Fit|parkeer|Parkeer|TinQ|Esso|OV-\s?Chipka|TLS BV|NS GROEP|GVB|Viggo'),
+ ('Car & transport', r'ATHLON|Shell|CJIB|Dancar|PARK MOBILE|Kwik-Fit|parkeer|Parkeer|TinQ|Esso|OV-\s?Chipka|TLS BV|NS GROEP|GVB|Viggo'),
  ('Groceries', r'Vomar|VOMAR|Albert Heijn|AH Almere|Lidl|ALDI|Jumbo|Makro|Kema Vlees|Visboer|Sabores|Koopman|CARREFOUR|DEKAMARKT|DIRK|KARSEMEIJER|KDA|Kwaliteitsvishande|MM Almere|Finalmente|Amazing|Turkuaz|1-Minute'),
  ('Household & drugstore', r'Kruidvat|ETOS|Action|Wibra|HEMA|Blokker|NORMAL|IKEA|Gamma|123inkt|Big Bazar|Miniso|pipoos'),
  ('Childcare (GO)', r'STICHTING GO|ouderportaal'),

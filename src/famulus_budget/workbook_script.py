@@ -13,7 +13,7 @@ INCOME = ['Salary (Schuberg Philis)','Child benefit (SVB)','Tax refunds','Other 
 EXPENSE = ['Mortgage','Energy & water','Taxes (municipal & national)','Insurance','Car & transport',
  'Groceries','Household & drugstore','Childcare (GO)','Kids lessons (ballet & piano)','Health & medical',
  'Telecom & internet','Subscriptions & digital','Entertainment & eating out','Clothing & personal',
- 'Online shopping','Transfers & Tikkie','Services & other']
+ 'Online shopping','Transfers & Tikkie','Work (reimbursed)','Services & other']
 ONEOFF = ['Renovation depot (one-off)','Renovation (one-off)']
 MONTHS = [f"2026-{m:02d}" for m in range(1,13)]
 MLABEL = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
