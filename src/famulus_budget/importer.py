@@ -14,7 +14,7 @@ INCOME_RULES = [
  ('Other income', r'.'),
 ]
 EXP_RULES = [
- ('Work (reimbursed)', r"Burger 'n Shake|NYX\*VendingWork|Q-Park"),
+ ('Work (reimbursed)', r"Burger 'n Shake|NYX\*VendingWork|Q-Park|Takeaway via MultiSafepay.*EREF/\d\d-\d\d-\d{4} 1[123]:"),
  ('Mortgage', r'ABN AMRO BANK NV.*(hy\s?potheek|Termijnbetaling|oh verhoging)'),
  ('Renovation (one-off)', r'Stroomgroep'),
  ('Energy & water', r'NextEnergy|Vattenfall|VITENS|GBLT|ENGIE'),
