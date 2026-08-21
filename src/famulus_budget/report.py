@@ -17,14 +17,14 @@ def weekly_report() -> str:
 
     wk, mo, unknown = {}, {}, []
     for iso, mon, src, mer, cat, amt in rows:
-        if src != "Bank" or amt >= 0:
+        if src != "Bank":
             continue
-        if cat in BUDGETS:
+        if cat in BUDGETS:  # net: refunds/repayments in a budget category count back
             if mon == month:
                 mo[cat] = mo.get(cat, 0) - amt
             if week_start <= iso <= today.isoformat():
                 wk[cat] = wk.get(cat, 0) - amt
-        elif cat == CATCH_ALL and week_start <= iso <= today.isoformat():
+        elif cat == CATCH_ALL and amt < 0 and week_start <= iso <= today.isoformat():
             unknown.append((mer.strip()[:34], -amt))
 
     lines = [f"*Status da semana* ({week_start[8:]}/{week_start[5:7]} a "

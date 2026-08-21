@@ -28,7 +28,7 @@ EXP_RULES = [
  ('Health & medical', r'INFOMEDICS|Flevoziekenhuis|Infomedics|apotheek|Apotheek|tandarts'),
  ('Telecom & internet', r'KPN|ODIDO'),
  ('Subscriptions & digital', r'Spotify|hbomax|APPLE\.COM|GOOGLE\*|MICROSOFT|PATREON|SQSP|Amazon Prime|STEAM|Netflix|Disney'),
- ('Entertainment & eating out', r"McDonalds|KFC|SUBWAY|IJssalon|Kinepolis|Burger|Thuisbezorgd|Subway|Starbucks|La Place|Febo|Snackbar|MOJO|Arena 81|Pathe|UBER \*EATS|Costes|Chillie|Beach Club|Pizzeria|Trattoria|Butcher Social|Albron|NEMO|Center Parcs|Restaurant|NYX\*|Kiddy|BACKWERK|Grill|Sushi|Pannenkoeken"),
+ ('Entertainment & eating out', r"McDonalds|KFC|SUBWAY|IJssalon|Kinepolis|Burger|Thuisbezorgd|Subway|Starbucks|La Place|Febo|Snackbar|MOJO|Arena 81|Pathe|UBER \*EATS|Costes|Chillie|Beach Club|Pizzeria|Trattoria|Butcher Social|Albron|NEMO|Center Parcs|Restaurant|NYX\*|Kiddy|BACKWERK|S en S food|Grill|Sushi|Pannenkoeken"),
  ('Clothing & personal', r'PRIMARK|Vinted|Zara|ZARA|C&A|Daily Style|BALTONA|Bershka|New Yorker|Zeeman|Takko|shein|SHEIN|H&M|Uniqlo|BARBERSHOP|Decathlon|Glaspunt|Pearle|vanHaren|Scapino|adidas'),
  ('Online shopping', r'Temu|TEMU|Amazon|AMZN|AliExpress|ALIBABA|bol\.com|BOL\.COM|eBay|ZOOLOX|FULLBO|PDFAID|DigiKey|Kiwi Electronics'),
  ('Transfers & Tikkie', r'Tikkie|Betaalverzoek|Wise|Geldmaat'),
