@@ -65,6 +65,18 @@ def _send_spreadsheet(to: str) -> str:
 
 
 def _add_rule(pattern: str, category: str) -> str:
+    # guard against over-broad patterns (e.g. "|PAS192" would match a whole card)
+    banned = re.compile(r"PAS\d|NR:|BEA|TRTP|EREF|^\W*$|^\d+$", re.I)
+    for part in pattern.split("|"):
+        if banned.search(part.strip()) or len(part.strip()) < 4:
+            return f"rejected: pattern part {part.strip()!r} is too generic"
+    try:
+        data = json.load(open(os.path.join(_budget_dir(), "pnl_rows.json")))
+        hits = {r[3][:20] for r in data if re.search(pattern, r[3], re.I)}
+        if len(hits) > 6:
+            return f"rejected: pattern matches {len(hits)} different merchants — too broad"
+    except Exception:
+        pass
     path = os.path.join(_budget_dir(), "custom_rules.json")
     try:
         rules = json.load(open(path))
