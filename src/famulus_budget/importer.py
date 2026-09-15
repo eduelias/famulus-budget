@@ -110,13 +110,25 @@ def import_pdf(pdf):
         if not (start <= d_iso <= end): continue
         desc = norm(r['desc'])
         if r['side'] == 'credit':
-            cat = 'Renovation depot (one-off)' if 'Depotbetaling' in desc else classify(desc, INCOME_RULES)
+            if 'Depotbetaling' in desc:
+                cat = 'Renovation depot (one-off)'
+            else:
+                exp = classify(desc, EXP_RULES)
+                cat = exp if exp not in ('Services & other', 'Work (reimbursed)') and not re.search(r'SCHUBERG|Sociale Verzekeringsbank|BELASTINGDIENST|THREEFORCE', desc) else classify(desc, INCOME_RULES)
             rows.append([d_iso, d_iso[:7], 'Bank', merchant(r['desc']), cat, round(r['amount'], 2)])
         else:
             if 'INT CARD' in desc: continue  # card detail imported separately
             rows.append([d_iso, d_iso[:7], 'Bank', merchant(r['desc']),
                          classify(desc, EXP_RULES), -round(r['amount'], 2)])
         added += 1
+    # manual overrides: [date, amount, merchant_substring, category]
+    try:
+        for d, a, sub, cat in json.load(open(os.path.join(HERE, 'overrides.json'))):
+            for r in rows:
+                if r[0] == d and abs(r[5] - a) < 0.005 and sub.lower() in r[3].lower():
+                    r[4] = cat
+    except FileNotFoundError:
+        pass
     rows.sort(key=lambda x: x[0])
     json.dump(rows, open(ROWS, 'w'))
     return f"imported {added} rows for {start}..{end}"
