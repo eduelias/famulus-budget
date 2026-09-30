@@ -21,7 +21,7 @@ EXP_RULES = [
  ('Taxes (municipal & national)', r'Gemeen\s?te Almere|GEM ALMERE|gemeentelijke belastingen|Belastingdienst|GBLT|BNG\*GEMEENTE'),
  ('Insurance', r'NN VERZEKEREN|NATIONALE-NED|Nationale-\s?Nederlanden|CHUBB|ONVZ'),
  ('Car & transport', r'ATHLON|cjib|Shell|CJIB|Dancar|PARK MOBILE|Kwik-Fit|parkeer|Parkeer|TinQ|Esso|OV-\s?Chipka|TLS BV|NS GROEP|GVB|Viggo'),
- ('Groceries', r'Vomar|VOMAR|Albert Heijn|AH Almere|Lidl|ALDI|Jumbo|Makro|Kema Vlees|Visboer|Sabores|Koopman|CARREFOUR|DEKAMARKT|DIRK|Broodpunt|Versshop|KARSEMEIJER|KDA|Kwaliteitsvishande|MM Almere|Finalmente|Amazing|Turkuaz|1-Minute'),
+ ('Groceries', r'Vomar|VOMAR|Albert Heijn|AH Almere|Lidl|ALDI|Jumbo|Makro|Kema Vlees|Visboer|Sabores|Koopman|CARREFOUR|DEKAMARKT|DIRK|Broodpunt|Versshop|Da Silva Lira|KARSEMEIJER|KDA|Kwaliteitsvishande|MM Almere|Finalmente|Amazing|Turkuaz|1-Minute'),
  ('Household & drugstore', r'Kruidvat|ETOS|Action|Wibra|HEMA|Blokker|NORMAL|IKEA|Gamma|Praxis|Rituals|Rataplan|Kringloop|123inkt|Big Bazar|Miniso|pipoos'),
  ('Childcare (GO)', r'STICHTING GO|ouderportaal'),
  ('Kids lessons (ballet & piano)', r'Balletschool|Musiqskool|Stichting Prisma|Kinderpostzegel'),
