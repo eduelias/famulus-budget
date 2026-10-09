@@ -8,6 +8,7 @@ HERE = os.environ.get('BUDGET_DIR', '/budget')
 ROWS = os.path.join(HERE, 'pnl_rows.json')
 
 INCOME_RULES = [
+ ('Salary (Venancia)', r'NEW YORKER NEDERLAND'),
  ('Salary (Schuberg Philis)', r'SCHUBERG'),
  ('Child benefit (SVB)', r'Sociale Verzekeringsbank'),
  ('Tax refunds', r'BELASTINGDIENST'),
@@ -20,15 +21,15 @@ EXP_RULES = [
  ('Energy & water', r'NextEnergy|Vattenfall|VITENS|GBLT|ENGIE|THREEFORCE'),
  ('Taxes (municipal & national)', r'Gemeen\s?te Almere|GEM ALMERE|gemeentelijke belastingen|Belastingdienst|GBLT|BNG\*GEMEENTE'),
  ('Insurance', r'NN VERZEKEREN|NATIONALE-NED|Nationale-\s?Nederlanden|CHUBB|ONVZ'),
- ('Car & transport', r'ATHLON|cjib|Shell|CJIB|Dancar|PARK MOBILE|Kwik-Fit|parkeer|Parkeer|TinQ|Esso|OV-\s?Chipka|TLS BV|NS GROEP|GVB|Viggo'),
- ('Groceries', r'Vomar|VOMAR|Albert Heijn|AH Almere|Lidl|ALDI|Jumbo|Makro|Kema Vlees|Visboer|Sabores|Koopman|CARREFOUR|DEKAMARKT|DIRK|Broodpunt|Versshop|Da Silva Lira|KARSEMEIJER|KDA|Kwaliteitsvishande|MM Almere|Finalmente|Amazing|Turkuaz|1-Minute'),
+ ('Car & transport', r'ATHLON|cjib|Shell|CJIB|Dancar|PARK MOBILE|Kwik-Fit|parkeer|Parkeer|TinQ|Esso|OV-\s?Chipka|NLOV|TLS BV|NS GROEP|GVB|Viggo'),
+ ('Groceries', r'Vomar|VOMAR|Albert Heijn|ALBERT HEIJN|AH Almere|Lidl|ALDI|Jumbo|Makro|Kema Vlees|Visboer|Sabores|Koopman|CARREFOUR|DEKAMARKT|DIRK|Broodpunt|Versshop|Da Silva Lira|KARSEMEIJER|KDA|Kwaliteitsvishande|MM Almere|Finalmente|Amazing|Turkuaz|1-Minute'),
  ('Household & drugstore', r'Kruidvat|ETOS|Action|Wibra|HEMA|Blokker|NORMAL|IKEA|Gamma|Praxis|Rituals|Rataplan|Kringloop|123inkt|Big Bazar|Miniso|pipoos'),
  ('Childcare (GO)', r'STICHTING GO|ouderportaal'),
  ('Kids lessons (ballet & piano)', r'Balletschool|Musiqskool|Stichting Prisma|Kinderpostzegel'),
  ('Health & medical', r'INFOMEDICS|Flevoziekenhuis|Infomedics|apotheek|Apotheek|tandarts'),
  ('Telecom & internet', r'KPN|ODIDO'),
  ('Subscriptions & digital', r'Spotify|SPOTIFY|NINTENDO|GOOGLE PHOT|hbomax|APPLE\.COM|GOOGLE\*|MICROSOFT|PATREON|SQSP|Amazon Prime|STEAM|Netflix|Disney'),
- ('Entertainment & eating out', r"McDonalds|KFC|SUBWAY|IJssalon|Kinepolis|Burger|Thuisbezorgd|Subway|Starbucks|La Place|Febo|Snackbar|MOJO|Arena 81|Pathe|UBER \*EATS|Costes|Chillie|Beach Club|Pizzeria|Trattoria|Butcher Social|Albron|NEMO|Center Parcs|Restaurant|NYX\*|Kiddy|BACKWERK|S en S food|Smullende|Robin en Kees|Sjakie Knakie|Grill|Sushi|Pannenkoeken"),
+ ('Entertainment & eating out', r"McDonalds|KFC|SUBWAY|IJssalon|Kinepolis|Burger|Thuisbezorgd|Subway|Starbucks|La Place|Febo|Snackbar|MOJO|Arena 81|Pathe|UBER \*EATS|Costes|Chillie|Beach Club|Pizzeria|Trattoria|Butcher Social|Albron|NEMO|Center Parcs|Restaurant|NYX\*|Kiddy|BACKWERK|S en S food|Smullende|Robin en Kees|Sjakie Knakie|Marco Polo|AMSTERDAM RAI|Grill|Sushi|Pannenkoeken"),
  ('Clothing & personal', r'PRIMARK|Vinted|Zara|ZARA|C&A|Daily Style|BALTONA|Bershka|New Yorker|NEWYORKER|Zeeman|Takko|Desapega|Sportpaleis|Sp\.2000|shein|SHEIN|H&M|Uniqlo|BARBERSHOP|Decathlon|Glaspunt|Pearle|COIFFURES|Kapsalon|vanHaren|Scapino|adidas'),
  ('Online shopping', r'Temu|TEMU|Amazon|AMAZON|AMZN|AliExpress|ALIBABA|bol\.com|BOL\.COM|eBay|ZOOLOX|FULLBO|PDFAID|DigiKey|Kiwi Electronics'),
  ('Transfers & Tikkie', r'Tikkie|Betaalverzoek|Wise|Geldmaat|via bunq'),
@@ -114,7 +115,7 @@ def import_pdf(pdf):
                 cat = 'Renovation depot (one-off)'
             else:
                 exp = classify(desc, EXP_RULES)
-                cat = exp if exp not in ('Services & other', 'Work (reimbursed)') and not re.search(r'SCHUBERG|Sociale Verzekeringsbank|BELASTINGDIENST', desc) else classify(desc, INCOME_RULES)
+                cat = exp if exp not in ('Services & other', 'Work (reimbursed)') and not re.search(r'SCHUBERG|NEW YORKER NEDERLAND|Sociale Verzekeringsbank|BELASTINGDIENST', desc) else classify(desc, INCOME_RULES)
             rows.append([d_iso, d_iso[:7], 'Bank', merchant(r['desc']), cat, round(r['amount'], 2)])
         else:
             if 'INT CARD' in desc: continue  # card detail imported separately

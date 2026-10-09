@@ -9,7 +9,7 @@ import os
 BD = os.environ.get('BUDGET_DIR', '/budget')
 rows = json.load(open(os.path.join(BD, 'pnl_rows.json')))
 
-INCOME = ['Salary (Schuberg Philis)','Child benefit (SVB)','Tax refunds','Other income']
+INCOME = ['Salary (Schuberg Philis)','Salary (Venancia)','Child benefit (SVB)','Tax refunds','Other income']
 EXPENSE = ['Mortgage','Energy & water','Taxes (municipal & national)','Insurance','Car & transport',
  'Groceries','Household & drugstore','Childcare (GO)','Kids lessons (ballet & piano)','Health & medical',
  'Telecom & internet','Subscriptions & digital','Entertainment & eating out','Clothing & personal',
