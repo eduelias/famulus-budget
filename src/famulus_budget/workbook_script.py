@@ -13,7 +13,7 @@ INCOME = ['Salary (Schuberg Philis)','Salary (Venancia)','Child benefit (SVB)','
 EXPENSE = ['Mortgage','Energy & water','Taxes (municipal & national)','Insurance','Car & transport',
  'Groceries','Household & drugstore','Childcare (GO)','Kids lessons (ballet & piano)','Health & medical',
  'Telecom & internet','Subscriptions & digital','Entertainment & eating out','Clothing & personal',
- 'Online shopping','Transfers & Tikkie','Work (reimbursed)','Services & other']
+ 'Online shopping','Transfers & Tikkie','Work (reimbursed)','Mesadas (Edu & Vê)','Savings (buffer)','Services & other']
 ONEOFF = ['Renovation depot (one-off)','Renovation (one-off)']
 MONTHS = [f"2026-{m:02d}" for m in range(1,13)]
 MLABEL = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -111,7 +111,7 @@ wsb['A1'] = 'Budget follow-up 2026'; wsb['A1'].font = Font(bold=True, size=14)
 wsb['A2'] = 'Change the budget amounts as you like. Actuals pull from the Transactions sheet. Green = within budget, red = over.'
 wsb['A2'].font = Font(italic=True, size=9)
 
-budgets = [('Groceries', 1000), ('Entertainment & eating out', 150), ('Household & drugstore', 250), ('Subscriptions & digital', 100), ('Childcare (GO)', 154), ('Kids lessons (ballet & piano)', 85)]
+budgets = [('Groceries', 1000), ('Entertainment & eating out', 250), ('Clothing & personal', 175), ('Household & drugstore', 275), ('Mesadas (Edu & Vê)', 400), ('Savings (buffer)', 700), ('Subscriptions & digital', 100), ('Childcare (GO)', 154), ('Kids lessons (ballet & piano)', 85)]
 r = 4
 for cat, bud in budgets:
     wsb.cell(r, 1, cat).font = Font(bold=True, size=12); wsb.cell(r,1).fill = SECFILL

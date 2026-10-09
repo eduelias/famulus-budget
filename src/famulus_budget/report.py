@@ -3,8 +3,9 @@ import datetime as dt
 import json
 import os
 
-BUDGETS = {"Groceries": ("Mercado", 1000), "Entertainment & eating out": ("Passeios", 150),
-           "Clothing & personal": ("Roupas", 125), "Household & drugstore": ("Casa e higiene", 250)}
+BUDGETS = {"Groceries": ("Mercado", 1000), "Entertainment & eating out": ("Passeios", 250),
+           "Clothing & personal": ("Roupas", 175), "Household & drugstore": ("Casa e higiene", 275),
+           "Mesadas (Edu & Vê)": ("Mesadas", 400), "Savings (buffer)": ("Poupança (buffer)", 700)}
 CATCH_ALL = "Services & other"
 
 

@@ -15,6 +15,8 @@ INCOME_RULES = [
  ('Other income', r'.'),
 ]
 EXP_RULES = [
+ ('Mesadas (Edu & Vê)', r'(?i)mesada'),
+ ('Savings (buffer)', r'(?i)buffer|Direct Sparen|spaarrekening'),
  ('Work (reimbursed)', r"Burger 'n Shake|Phad Thai|Q-Park|Takeaway via MultiSafepay.*EREF/\d\d-\d\d-\d{4} 1[123]:"),
  ('Mortgage', r'ABN AMRO BANK NV.*(hy\s?potheek|Termijnbetaling|oh verhoging)'),
  ('Renovation (one-off)', r'Stroomgroep'),
