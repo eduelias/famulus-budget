@@ -33,7 +33,7 @@ def weekly_report() -> str:
     for cat, (pt, budget) in BUDGETS.items():
         guide = budget / 4.33
         w, m = wk.get(cat, 0), mo.get(cat, 0)
-        icon = "✅" if w <= guide else "⚠️"
+        icon = "🔴" if m > budget else ("✅" if w <= guide else "⚠️")
         lines.append(f"{icon} {pt}: €{w:.0f} na semana (guia ~€{guide:.0f}) | mês €{m:.0f}/{budget}")
     if unknown:
         lines += ["", "*Não reconhecidos* (fora dos orçamentos):"]
