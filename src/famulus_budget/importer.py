@@ -25,13 +25,13 @@ EXP_RULES = [
  ('Insurance', r'NN VERZEKEREN|NATIONALE-NED|Nationale-\s?Nederlanden|CHUBB'),
  ('Car & transport', r'ATHLON|cjib|Shell|CJIB|Dancar|PARK MOBILE|Kwik-Fit|parkeer|Parkeer|TinQ|Esso|OV-\s?Chipka|NLOV|TLS BV|NS GROEP|GVB|Viggo'),
  ('Groceries', r'Vomar|VOMAR|Albert Heijn|ALBERT HEIJN|AH Almere|Lidl|ALDI|Jumbo|Makro|Kema Vlees|Visboer|Sabores|Koopman|CARREFOUR|DEKAMARKT|DIRK|Broodpunt|Versshop|Da Silva Lira|Desapega|KARSEMEIJER|KDA|Kwaliteitsvishande|MM Almere|Finalmente|Amazing|Turkuaz|1-Minute'),
- ('Household & drugstore', r'Kruidvat|ETOS|Action|Wibra|HEMA|Blokker|NORMAL|IKEA|Gamma|Praxis|Rituals|Rataplan|Kringloop|123inkt|Big Bazar|Miniso|pipoos'),
+ ('Household & drugstore', r'Kruidvat|ETOS|Action|Wibra|HEMA|Blokker|NORMAL|IKEA|Gamma|Praxis|Rituals|Rataplan|Kringloop|Xenos|123inkt|Big Bazar|Miniso|pipoos'),
  ('Childcare (GO)', r'STICHTING GO|ouderportaal'),
  ('Kids lessons (ballet & piano)', r'Balletschool|Musiqskool|Stichting Prisma|Kinderpostzegel'),
  ('Health & medical', r'INFOMEDICS|Flevoziekenhuis|Infomedics|apotheek|Apotheek|tandarts|ONVZ'),
  ('Telecom & internet', r'KPN|ODIDO'),
  ('Subscriptions & digital', r'Spotify|SPOTIFY|NINTENDO|GOOGLE PHOT|hbomax|APPLE\.COM|GOOGLE\*|MICROSOFT|PATREON|SQSP|Amazon Prime|STEAM|Netflix|Disney'),
- ('Entertainment & eating out', r"McDonalds|KFC|SUBWAY|IJssalon|Kinepolis|Burger|Thuisbezorgd|Subway|Starbucks|La Place|Febo|Snackbar|MOJO|Arena 81|Pathe|UBER \*EATS|Costes|Chillie|Beach Club|Pizzeria|Trattoria|Butcher Social|Albron|NEMO|Center Parcs|Restaurant|NYX\*|Kiddy|BACKWERK|S en S food|Smullende|Robin en Kees|Sjakie Knakie|Marco Polo|AMSTERDAM RAI|Grill|Sushi|Pannenkoeken"),
+ ('Entertainment & eating out', r"McDonalds|KFC|SUBWAY|IJssalon|Kinepolis|Burger|Thuisbezorgd|Subway|Starbucks|La Place|Febo|Snackbar|MOJO|Arena 81|Pathe|UBER \*EATS|Costes|Chillie|Beach Club|Pizzeria|Trattoria|Butcher Social|Albron|NEMO|Center Parcs|Restaurant|NYX\*|Kiddy|BACKWERK|S en S food|Smullende|Robin en Kees|Sjakie Knakie|Marco Polo|AMSTERDAM RAI|Grill|Sushi|Pannenkoeken|Optisport|Vrijbuiter|Mr\. Fillet|TMC\*"),
  ('Clothing & personal', r'PRIMARK|Vinted|Zara|ZARA|C&A|Daily Style|BALTONA|Bershka|New Yorker|NEWYORKER|Zeeman|Takko|Sportpaleis|Sp\.2000|shein|SHEIN|H&M|Uniqlo|BARBERSHOP|Decathlon|Glaspunt|Pearle|COIFFURES|Kapsalon|vanHaren|Scapino|adidas'),
  ('Online shopping', r'Temu|TEMU|Amazon|AMAZON|AMZN|AliExpress|ALIBABA|bol\.com|BOL\.COM|eBay|ZOOLOX|FULLBO|PDFAID|DigiKey|Kiwi Electronics'),
  ('Transfers & Tikkie', r'Tikkie|Betaalverzoek|Wise|Geldmaat|via bunq'),
@@ -135,6 +135,59 @@ def import_pdf(pdf):
     rows.sort(key=lambda x: x[0])
     json.dump(rows, open(ROWS, 'w'))
     return f"imported {added} rows for {start}..{end}"
+
+def parse_tab(path):
+    """ABN AMRO TXT/TAB export: acct, cur, date, bal_before, bal_after, valuedate, amount, desc."""
+    recs = []
+    for line in open(path, encoding='utf-8', errors='replace'):
+        f = line.rstrip('\r\n').split('\t')
+        if len(f) < 8 or not re.match(r'\d{8}$', f[2]): continue
+        d = f[2]; iso = f"{d[:4]}-{d[4:6]}-{d[6:]}"
+        amt = float(f[6].replace('.', '').replace(',', '.'))
+        recs.append({'date': iso, 'amount': abs(amt), 'side': 'credit' if amt > 0 else 'debit', 'desc': norm(f[7])})
+    return recs
+
+def _ingest(recs, start, end):
+    rows = json.load(open(ROWS))
+    rows = [r for r in rows if not (r[2] in ('Bank', 'Planned') and start <= r[0] <= end)]
+    added = 0
+    for r in recs:
+        d_iso = r['date']
+        if not (start <= d_iso <= end): continue
+        desc = r['desc']
+        mdesc = f"{d_iso[8:]}-{d_iso[5:7]}-{d_iso[:4]} {desc}"
+        if r['side'] == 'credit':
+            if 'Depotbetaling' in desc or ('ABN AMRO BANK NV' in desc and '/REMI/' not in desc):
+                cat = 'Renovation depot (one-off)'
+            else:
+                exp = classify(desc, EXP_RULES)
+                cat = exp if exp not in ('Services & other', 'Work (reimbursed)') and not re.search(r'SCHUBERG|NEW YORKER NEDERLAND|Sociale Verzekeringsbank|BELASTINGDIENST', desc) else classify(desc, INCOME_RULES)
+            rows.append([d_iso, d_iso[:7], 'Bank', merchant(mdesc), cat, round(r['amount'], 2)])
+        else:
+            if 'INT CARD' in desc: continue
+            rows.append([d_iso, d_iso[:7], 'Bank', merchant(mdesc), classify(desc, EXP_RULES), -round(r['amount'], 2)])
+        added += 1
+    try:
+        for d, a, sub, cat in json.load(open(os.path.join(HERE, 'overrides.json'))):
+            for r in rows:
+                if r[0] == d and abs(r[5] - a) < 0.005 and sub.lower() in r[3].lower():
+                    r[4] = cat
+    except FileNotFoundError:
+        pass
+    rows.sort(key=lambda x: x[0])
+    json.dump(rows, open(ROWS, 'w'), ensure_ascii=False)
+    return f"imported {added} rows for {start}..{end}"
+
+def import_tab(path, start=None, end=None):
+    """Incremental by default: only dates after the last Bank row already stored."""
+    recs = parse_tab(path)
+    if not recs: return 'no transactions in file'
+    rows = json.load(open(ROWS))
+    last = max((r[0] for r in rows if r[2] == 'Bank'), default='2000-01-01')
+    import datetime as _dt
+    start = start or (_dt.date.fromisoformat(last) + _dt.timedelta(days=1)).isoformat()
+    end = end or max(r['date'] for r in recs)
+    return _ingest(recs, start, end)
 
 if __name__ == '__main__':
     import_pdf(sys.argv[1])

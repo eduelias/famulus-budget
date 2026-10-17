@@ -16,7 +16,7 @@ import httpx
 from famulus import config
 from famulus.plugins import BasePlugin, spec
 
-from .importer import import_pdf
+from .importer import import_pdf, import_tab
 from .report import weekly_report
 
 __version__ = "0.1.0"
@@ -24,7 +24,7 @@ __all__ = ["BudgetPlugin"]
 
 GRAPH = "https://graph.facebook.com/v20.0"
 XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-FILENAME_RE = re.compile(r"^mutov\d+_\d{8}-\d{8}\.pdf$")
+FILENAME_RE = re.compile(r"^(mutov\d+_\d{8}-\d{8}\.pdf|TXT\d{12}\.TAB)$", re.IGNORECASE)
 
 
 def _budget_dir() -> str:
@@ -115,7 +115,7 @@ class BudgetPlugin(BasePlugin):
         dest = os.path.join(_budget_dir(), "statements", doc["filename"])
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         _download_media(doc["id"], dest)
-        result = import_pdf(dest)
+        result = import_tab(dest) if dest.lower().endswith(".tab") else import_pdf(dest)
         try:
             _rebuild_workbook()
         except Exception:
