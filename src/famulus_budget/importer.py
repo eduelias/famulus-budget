@@ -16,6 +16,7 @@ INCOME_RULES = [
 ]
 EXP_RULES = [
  ('Mesadas (Edu & Vê)', r'(?i)mesada'),
+ ('Savings (NAS fund)', r'(?i)NAS fund|NAS-fonds|Du7 NAS'),
  ('Savings (buffer)', r'(?i)buffer|Direct Sparen|spaarrekening'),
  ('Work (reimbursed)', r"Burger 'n Shake|Phad Thai|Q-Park|Takeaway via MultiSafepay.*EREF/\d\d-\d\d-\d{4} 1[123]:"),
  ('Mortgage', r'ABN AMRO BANK NV.*(hy\s?potheek|Termijnbetaling|oh verhoging)'),
