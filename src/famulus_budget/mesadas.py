@@ -4,7 +4,7 @@ joint-account purchases tagged 'Mesada (Vê)' / 'Mesada (Edu)'. Unspent carries 
 Usage: python3 mesadas.py [YYYY-MM]"""
 import json, os, sys, collections, datetime as dt
 
-HERE = os.environ.get('BUDGET_DIR', os.path.dirname(os.path.abspath(__file__)))
+HERE = os.environ.get('BUDGET_DIR') or ('/budget' if os.path.isdir('/budget') else os.path.dirname(os.path.abspath(__file__)))
 ROWS = os.path.join(HERE, 'pnl_rows.json')
 START = '2026-10'
 ALLOWANCE = {'Mesada (Vê)': 200.0, 'Mesada (Edu)': 200.0}
