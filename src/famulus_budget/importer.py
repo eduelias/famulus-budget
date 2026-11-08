@@ -21,7 +21,7 @@ EXP_RULES = [
  ('Work (reimbursed)', r"Burger 'n Shake|Phad Thai|Q-Park|Takeaway via MultiSafepay.*EREF/\d\d-\d\d-\d{4} 1[123]:"),
  ('Mortgage', r'ABN AMRO BANK NV.*(hy\s?potheek|Termijnbetaling|oh verhoging)'),
  ('Renovation (one-off)', r'Stroomgroep'),
- ('Energy & water', r'NextEnergy|Vattenfall|VITENS|ENGIE|THREEFORCE'),
+ ('Energy & water', r'NextEnergy|Vattenfall|VITENS|ENGIE|THREEFORCE|Frank Energie'),
  ('Taxes (municipal & national)', r'Gemeen\s?te Almere|GEM ALMERE|gemeentelijke belastingen|Belastingdienst|GBLT|BNG\*GEMEENTE'),
  ('Insurance', r'NN VERZEKEREN|NATIONALE-NED|Nationale-\s?Nederlanden|CHUBB'),
  ('Car & transport', r'ATHLON|cjib|Shell|CJIB|Dancar|PARK MOBILE|Kwik-Fit|parkeer|Parkeer|TinQ|Esso|OV-\s?Chipka|NLOV|TLS BV|NS GROEP|GVB|Viggo|Villa Arena|P\d\+P\d'),
@@ -32,7 +32,7 @@ EXP_RULES = [
  ('Health & medical', r'INFOMEDICS|Flevoziekenhuis|Infomedics|apotheek|Apotheek|tandarts|ONVZ'),
  ('Telecom & internet', r'KPN|ODIDO'),
  ('Subscriptions & digital', r'Spotify|SPOTIFY|NINTENDO|GOOGLE PHOT|hbomax|APPLE\.COM|GOOGLE\*|MICROSOFT|PATREON|SQSP|Amazon Prime|STEAM|Netflix|Disney'),
- ('Entertainment & eating out', r"McDonalds|KFC|SUBWAY|IJssalon|Kinepolis|Burger|Thuisbezorgd|Subway|Starbucks|La Place|Febo|Snackbar|MOJO|Arena 81|Pathe|UBER \*EATS|Costes|Chillie|Beach Club|Pizzeria|Trattoria|Butcher Social|Albron|NEMO|Center Parcs|Restaurant|NYX\*|Kiddy|BACKWERK|S en S food|Smullende|Robin en Kees|Sjakie Knakie|Marco Polo|AMSTERDAM RAI|Grill|Sushi|Pannenkoeken|Optisport|Vrijbuiter|Mr\. Fillet|TMC\*|Grillpaleis|Ballorig|ZvO Horeca"),
+ ('Entertainment & eating out', r"McDonalds|KFC|SUBWAY|IJssalon|Kinepolis|Burger|Thuisbezorgd|Subway|Starbucks|La Place|Febo|Snackbar|MOJO|Arena 81|Pathe|UBER \*EATS|Costes|Chillie|Beach Club|Pizzeria|Trattoria|Butcher Social|Albron|NEMO|Center Parcs|Restaurant|NYX\*|Kiddy|BACKWERK|S en S food|Smullende|Robin en Kees|Sjakie Knakie|Marco Polo|AMSTERDAM RAI|Grill|Sushi|Pannenkoeken|Optisport|Vrijbuiter|Mr\. Fillet|TMC\*|Grillpaleis|Ballorig|ZvO Horeca|Churros|Snackbistro|van der schuur"),
  ('Clothing & personal', r'PRIMARK|Vinted|Zara|ZARA|C&A|Daily Style|BALTONA|Bershka|New Yorker|NEWYORKER|Zeeman|Takko|Sportpaleis|Sp\.2000|shein|SHEIN|H&M|Uniqlo|BARBERSHOP|Decathlon|Glaspunt|Pearle|COIFFURES|Kapsalon|vanHaren|Scapino|adidas|TK Maxx|Foot Locker|Decathlon'),
  ('Online shopping', r'Temu|TEMU|Amazon|AMAZON|AMZN|AliExpress|ALIBABA|bol\.com|BOL\.COM|eBay|ZOOLOX|FULLBO|PDFAID|DigiKey|Kiwi Electronics'),
  ('Transfers & Tikkie', r'Tikkie|Betaalverzoek|Wise|Geldmaat|via bunq'),
@@ -156,7 +156,7 @@ def _ingest(recs, start, end):
         d_iso = r['date']
         if not (start <= d_iso <= end): continue
         desc = r['desc']
-        mdesc = f"{d_iso[8:]}-{d_iso[5:7]}-{d_iso[:4]} {desc}"
+        mdesc = desc if re.match(r"\d{2}-\d{2}-\d{4} ", desc) else f"{d_iso[8:]}-{d_iso[5:7]}-{d_iso[:4]} {desc}"
         if r['side'] == 'credit':
             if 'Depotbetaling' in desc or ('ABN AMRO BANK NV' in desc and '/REMI/' not in desc):
                 cat = 'Renovation depot (one-off)'
