@@ -5,7 +5,8 @@ import os
 
 BUDGETS = {"Groceries": ("Mercado", 1000), "Entertainment & eating out": ("Passeios", 250),
            "Clothing & personal": ("Roupas", 175), "Household & drugstore": ("Casa e higiene", 275),
-           "Mesadas (Edu & Vê)": ("Mesadas", 400), "Savings (buffer)": ("Poupança (buffer)", 700)}
+           "Mesada (Vê)": ("Mesada Vê", 200), "Mesada (Edu)": ("Mesada Edu", 200),
+           "Savings (buffer)": ("Poupança (buffer)", 700)}
 CATCH_ALL = "Services & other"
 
 
@@ -35,6 +36,11 @@ def weekly_report() -> str:
         w, m = wk.get(cat, 0), mo.get(cat, 0)
         icon = "🔴" if m > budget else ("✅" if w <= guide else "⚠️")
         lines.append(f"{icon} {pt}: €{w:.0f} na semana (guia ~€{guide:.0f}) | mês €{m:.0f}/{budget}")
+    try:
+        from .mesadas import text as _mesada_text
+        lines += ["", "*Saldo das mesadas* (acumulado desde out/2026):", _mesada_text(month)]
+    except Exception:
+        pass
     if unknown:
         lines += ["", "*Não reconhecidos* (fora dos orçamentos):"]
         lines += [f"  • €{v:.2f} — {m}" for m, v in unknown[:10]]

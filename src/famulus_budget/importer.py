@@ -15,7 +15,8 @@ INCOME_RULES = [
  ('Other income', r'.'),
 ]
 EXP_RULES = [
- ('Mesadas (Edu & Vê)', r'(?i)mesada'),
+ ('Mesada (Vê)', r'(?i)mesada.*v[eê]|v[eê].*mesada'),
+ ('Mesada (Edu)', r'(?i)mesada'),
  ('Savings (NAS fund)', r'(?i)NAS fund|NAS-fonds|Du7 NAS'),
  ('Savings (buffer)', r'(?i)buffer|Direct Sparen|spaarrekening'),
  ('Work (reimbursed)', r"Burger 'n Shake|Phad Thai|Q-Park|Takeaway via MultiSafepay.*EREF/\d\d-\d\d-\d{4} 1[123]:"),
@@ -127,10 +128,12 @@ def import_pdf(pdf):
         added += 1
     # manual overrides: [date, amount, merchant_substring, category]
     try:
-        for d, a, sub, cat in json.load(open(os.path.join(HERE, 'overrides.json'))):
+        for ov in json.load(open(os.path.join(HERE, 'overrides.json'))):
+            d, a, sub, cat = ov[:4]
             for r in rows:
                 if r[0] == d and abs(r[5] - a) < 0.005 and sub.lower() in r[3].lower():
                     r[4] = cat
+                    if len(ov) > 4 and ov[4]: r[1] = ov[4]
     except FileNotFoundError:
         pass
     rows.sort(key=lambda x: x[0])
@@ -169,10 +172,12 @@ def _ingest(recs, start, end):
             rows.append([d_iso, d_iso[:7], 'Bank', merchant(mdesc), classify(desc, EXP_RULES), -round(r['amount'], 2)])
         added += 1
     try:
-        for d, a, sub, cat in json.load(open(os.path.join(HERE, 'overrides.json'))):
+        for ov in json.load(open(os.path.join(HERE, 'overrides.json'))):
+            d, a, sub, cat = ov[:4]
             for r in rows:
                 if r[0] == d and abs(r[5] - a) < 0.005 and sub.lower() in r[3].lower():
                     r[4] = cat
+                    if len(ov) > 4 and ov[4]: r[1] = ov[4]
     except FileNotFoundError:
         pass
     rows.sort(key=lambda x: x[0])
